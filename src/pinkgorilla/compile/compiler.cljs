@@ -1,4 +1,6 @@
-(ns pinkgorilla.compiler
+(ns pinkgorilla.compile.compiler
+   (:require-macros
+    [pinkgorilla.compile.analyzer :refer [analyzer-state]])
   (:require
    [cljs.core.async
     :as async
@@ -10,6 +12,7 @@
    [cljs.tools.reader :refer [read-string]]
    [cljs.env :as env]
    [cljs.js :refer [empty-state eval js-eval eval-str require]]
+   [pinkgorilla.compile.sandbox]
    ))
 
 
@@ -50,4 +53,29 @@
        (catch :default cause
          (cb {:error (prn-str cause)})))))
   ([source cb]
-   (eva 'user.core source cb)))
+   (eva 'pinkgorilla.compile.sandbox source cb)))
+
+
+(defn load-analysis-cache! []
+  (cljs.js/load-analysis-cache! state 'pinkgorilla.compile.sandbox (analyzer-state 'pinkgorilla.compile.sandbox))
+  (cljs.js/load-analysis-cache! state 're-com.core (analyzer-state 're-com.core))
+)
+
+;; path to Transit encoded analysis cache
+(def cache-url "/assets/js/cljs/core.cljs.cache.aot.json")
+
+(defn load-analysis-cache-from-url []
+  (http/get cache-url
+            (fn [json]
+              (let [rdr   (transit/reader :json)
+                    cache (transit/read rdr json)]
+                (cljs.js/load-analysis-cache! state 'cljs.core cache)
+        ;; ...
+                ))))
+
+
+
+(load-analysis-cache!)
+  
+   
+   

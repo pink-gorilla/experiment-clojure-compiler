@@ -9,7 +9,8 @@
   :dependencies [[org.clojure/clojure "1.10.0"]
                  [org.clojure/clojurescript "1.10.520"]
                  [org.clojure/core.async  "0.4.500"]
-                 [org.clojure/tools.reader "1.3.2"]]
+                 [org.clojure/tools.reader "1.3.2"]
+                 [re-com "1.3.0"]]
 
   :plugins [[lein-figwheel "0.5.19"]
             [lein-cljsbuild "1.1.7" :exclusions [[org.clojure/clojure]]]]

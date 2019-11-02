@@ -1,7 +1,6 @@
 (ns hello-world.core
-    (:require 
-     [hello-world.test :refer [run-test xxx]]
-     [pinkgorilla.compiler]))
+  (:require 
+    [hello-world.test :refer [run-test xxx]]))
 
 (enable-console-print!)
 
@@ -18,6 +17,7 @@
   ;; (swap! app-state update-in [:__figwheel_counter] inc)
 )
 
-(run-test)
 (xxx)
+(run-test)
+
 

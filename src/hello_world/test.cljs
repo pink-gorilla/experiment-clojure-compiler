@@ -1,6 +1,6 @@
 (ns hello-world.test
   (:require 
-  [pinkgorilla.compiler]))
+  [pinkgorilla.compile.compiler :refer [eva]]))
 
 
 (def c
@@ -9,15 +9,28 @@
 
 (defn print-result 
   [result]
-  (println "evaluated result: " (prn result)))
+  (let [{value :value 
+         error :error} result]
+  ;(println "callback received: ")
+  ;(println "type of result: " (type result))
+    (if (nil? error)
+        (println "eval result: " value)
+        (println "eval error: " error))))
 
 
 (defn xxx []
-  (println "xxx"))
+  (println "Yippie! The test module did compile without errors!"))
 
 (defn run-test []
-  (println "evaling c..")
-  (pinkgorilla.compiler/eva c print-result)
-  (println "evaling c.. done.")
+  (println "Running Evaluation Tests..")
+  
+  (eva " (+ 1 2 )" print-result) ; the simplest of all expressions
+  
+  (eva " (help) " print-result)  ; call function in the eval namespace. Will produce an error because no namespace referred.
+  
+  (eva " (pinkgorilla.compile.sandbox/help) " print-result)  ; call function in the eval namespace. Will produce an error because no namespace referred.
+  ;(eva c print-result)
+  
+  (println "Running Evaluation Tests.. done.")
   
   )
