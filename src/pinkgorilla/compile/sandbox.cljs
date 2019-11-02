@@ -5,4 +5,4 @@
 
 
 (defn help []
-  (println "The ambulance is coming.."))
+  "The ambulance is coming..")

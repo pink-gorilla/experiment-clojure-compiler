@@ -10,6 +10,14 @@
                  [org.clojure/clojurescript "1.10.520"]
                  [org.clojure/core.async  "0.4.500"]
                  [org.clojure/tools.reader "1.3.2"]
+                 
+                 [org.clojure/tools.namespace "0.3.0-alpha4"] ; for compilation analysis state detection
+                 [org.clojure/java.classpath "0.3.0"] ; for compilation analysis state detection
+                 
+                 ;[com.cognitect/transit-clj "0.8.319"]  ; for analyis cache from url loading (currently unused)
+                 
+                 ; dependencies for testing 
+                 [awb99.fortune "0.0.1"] ; the simplest of all external libraries
                  [re-com "1.3.0"]]
 
   :plugins [[lein-figwheel "0.5.19"]

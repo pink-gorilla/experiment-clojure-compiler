@@ -20,6 +20,34 @@
 (def state (cljs.js/empty-state))
 
 
+(def default-namespace-declaration
+    "(ns blistering.sandbox) ")
+
+(def default-dependencies
+  {}) ; map of namespace name to source
+
+(defonce namespace-declaration (atom default-namespace-declaration))
+(defonce dependencies (atom default-dependencies))
+
+(defn init [user-namespace-declaration user-dependencies]
+  (reset! namespace-declaration user-namespace-declaration)
+  (reset! dependencies user-dependencies)
+  )
+
+
+(defn loader
+  "A namespace loader that looks in the dependencies bundle for required namespaces."
+  [{:keys [name]} callback]
+  (let [str-name (.-str name)
+        source (@dependencies str-name)]
+    (if source
+      (js/console.log (str "PinkCompiler /Loading " str-name "."))
+      (js/console.log (str "PinkCompiler / Unable to load " str-name ".")))
+    (callback {:lang :clj :source (str source)})))
+
+
+
+
 (def print-chan (async/chan 10))
 
 (go-loop [msg (async/<! print-chan)]
@@ -37,13 +65,17 @@
 (defn eva
   ([nssym source cb]
    (if (string? source)
-       (cljs.js/eval-str state source nil
-                         {:eval cljs.js/js-eval
-                          :context :expr
-                          :ns nssym
-                          ;:load loader-fn
-                          }
-                         cb)
+       (cljs.js/eval-str 
+        state 
+        (str @namespace-declaration source)
+        nil
+        {:eval cljs.js/js-eval
+         :context :expr
+         ;:ns nssym
+         ;:load loader
+         :load loader-fn
+         }
+        cb)
      (try
        (cljs.js/eval state source
                      {:eval cljs.js/js-eval
@@ -58,21 +90,9 @@
 
 (defn load-analysis-cache! []
   (cljs.js/load-analysis-cache! state 'pinkgorilla.compile.sandbox (analyzer-state 'pinkgorilla.compile.sandbox))
+  (cljs.js/load-analysis-cache! state 'fortune.core (analyzer-state 'fortune.core))
   (cljs.js/load-analysis-cache! state 're-com.core (analyzer-state 're-com.core))
-)
-
-;; path to Transit encoded analysis cache
-(def cache-url "/assets/js/cljs/core.cljs.cache.aot.json")
-
-(defn load-analysis-cache-from-url []
-  (http/get cache-url
-            (fn [json]
-              (let [rdr   (transit/reader :json)
-                    cache (transit/read rdr json)]
-                (cljs.js/load-analysis-cache! state 'cljs.core cache)
-        ;; ...
-                ))))
-
+  )
 
 
 (load-analysis-cache!)
