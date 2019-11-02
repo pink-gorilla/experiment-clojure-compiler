@@ -39,12 +39,12 @@
    All functions that should be available in the self hosted clojurescript have
    to be added here.
   "
-  ;(macro/sources
-    (analyzer/sources
-     "fortune.core"
+  (macro/sources
+  ;  (analyzer/sources
+     fortune.core
      ))
 
-
+; "fortune.core"
 
 
 ; %s

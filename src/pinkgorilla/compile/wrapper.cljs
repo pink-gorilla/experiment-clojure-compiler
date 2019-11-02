@@ -1,8 +1,7 @@
 (ns pinkgorilla.compile.wrapper
   (:require
     [clojure.string :as cljstr]
-    [goog.string :as gstring]
-    [goog.string.format]
+    [goog.string]
   ))
 
 (def base-requires
@@ -26,7 +25,7 @@
 
 (defn add-requires [base requires]
   (reduce (fn[R r]
-            (format (str R "\n         %s") r))
+            (goog.string/format (str R "\n         %s") r))
           base-requires requires))
 
 ;(defn set-namespace

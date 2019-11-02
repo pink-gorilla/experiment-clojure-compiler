@@ -109,10 +109,9 @@
   (println "loading analyis cache..")
   (cljs.js/load-analysis-cache! state 'pinkgorilla.compile.sandbox (analyzer-state 'pinkgorilla.compile.sandbox))
   (cljs.js/load-analysis-cache! state 'fortune.core (analyzer-state 'fortune.core))
-  (cljs.js/load-analysis-cache! state 're-com.core (analyzer-state 're-com.core))
-  (cljs.js/load-analysis-cache! state 'hello-world.app (analyzer-state 'hello-world.app))
-  
-  (println "analyzer state is: "  (analyzer-state 'pinkgorilla.compile.sandbox))
+  ;(cljs.js/load-analysis-cache! state 're-com.core (analyzer-state 're-com.core))
+  ;(cljs.js/load-analysis-cache! state 'hello-world.app (analyzer-state 'hello-world.app))
+  ;(println "analyzer state is: "  (analyzer-state 'pinkgorilla.compile.sandbox))
   )
  
-   (load-analysis-cache!)  
+  (load-analysis-cache!)  
