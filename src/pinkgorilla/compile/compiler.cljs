@@ -7,8 +7,10 @@
     :refer (<! >! put! chan)
     :refer-macros [go go-loop]]
    [clojure.string :as cljstr]
-   [goog.string :as gstring]
+   
+   [goog.string]
    [goog.string.format]
+
    [cljs.tools.reader :refer [read-string]]
    [cljs.env :as env]
    [cljs.js :refer [empty-state eval js-eval eval-str require]]
@@ -48,6 +50,7 @@
 
 
 
+
 (def print-chan (async/chan 10))
 
 (go-loop [msg (async/<! print-chan)]
@@ -62,40 +65,54 @@
   (printchan info-map)
   (cb  {:lang :js :source ""}))
 
+
+; Snippet Modification
+
+(defn format [s & params]
+  (apply goog.string/format s params))
+
+(defn snippet-to-code [nssym snippet]
+  (let [code (str @namespace-declaration snippet)
+        ;code (str (format @namespace-declaration nssym) snippet)
+        ]
+  (println "compiling code: " code)
+    code))
+  
+
 (defn eva
-  ([nssym source cb]
-   (if (string? source)
+  ([nssym snippet cb]
+   (if (string? snippet)
        (cljs.js/eval-str 
         state 
-        (str @namespace-declaration source)
+        (snippet-to-code nssym snippet)
         nil
         {:eval cljs.js/js-eval
          :context :expr
-         ;:ns nssym
+         :ns nssym
          ;:load loader
          :load loader-fn
          }
         cb)
      (try
-       (cljs.js/eval state source
+       (cljs.js/eval state snippet
                      {:eval cljs.js/js-eval
                       :ns nssym
                       :context :expr}
                      cb)
        (catch :default cause
          (cb {:error (prn-str cause)})))))
-  ([source cb]
-   (eva 'pinkgorilla.compile.sandbox source cb)))
+  ([snippet cb]
+   (eva 'pinkgorilla.compile.sandbox snippet cb)))
 
 
 (defn load-analysis-cache! []
+  (println "loading analyis cache..")
   (cljs.js/load-analysis-cache! state 'pinkgorilla.compile.sandbox (analyzer-state 'pinkgorilla.compile.sandbox))
   (cljs.js/load-analysis-cache! state 'fortune.core (analyzer-state 'fortune.core))
   (cljs.js/load-analysis-cache! state 're-com.core (analyzer-state 're-com.core))
-  )
-
-
-(load-analysis-cache!)
+  (cljs.js/load-analysis-cache! state 'hello-world.app (analyzer-state 'hello-world.app))
   
-   
-   
+  (println "analyzer state is: "  (analyzer-state 'pinkgorilla.compile.sandbox))
+  )
+ 
+   (load-analysis-cache!)  

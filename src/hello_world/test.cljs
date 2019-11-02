@@ -1,7 +1,11 @@
 (ns hello-world.test
   (:require 
+   
+   [pinkgorilla.compile.compiler :refer [init eva]]
    [hello-world.config]
-   [pinkgorilla.compile.compiler :refer [init eva]]))
+   [hello-world.app]
+   
+   ))
 
 
 
@@ -19,7 +23,6 @@
 
 (defn xxx []
   (println "Yippie! The test module did compile without errors!")
-  
   (println "Namespace Definition: \n\r" hello-world.config/namespace-declaration )
   (println "Library Dependencies: \n\r" hello-world.config/dependencies)
   )
@@ -30,13 +33,13 @@
   
   (println "Running Evaluation Tests..")
   
-  (eva " (+ 1 2 )" print-result) ; the simplest of all expressions
+  (eva 'bongo.demo " (+ 1 2 )" print-result) ; the simplest of all expressions
   
-  (eva " (help) " print-result)  ; call function in the eval namespace. Will produce an error because no namespace referred.
+  (eva 'bongo.demo " (help) " print-result)  ; call function in the eval namespace. Will produce an error because no namespace referred.
   
-  (eva " (pinkgorilla.compile.sandbox/help) " print-result)  ; call function in the eval namespace. Will produce an error because no namespace referred.
+  (eva 'bongo.demo " (pinkgorilla.compile.sandbox/help) " print-result)  ; call function in the eval namespace. Will produce an error because no namespace referred.
   
-  (eva " (cookie) " print-result)
+  (eva 'bongo.demo " (cookie) " print-result)
 
  ;(eva " (def y 34) " print-result)
   

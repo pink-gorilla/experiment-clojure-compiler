@@ -4,5 +4,6 @@
 
 
 
-(defn help []
-  "The ambulance is coming..")
+(defn ping []
+  "pong")
+
