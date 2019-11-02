@@ -96,7 +96,7 @@
      (try
        (cljs.js/eval state snippet
                      {:eval cljs.js/js-eval
-                      :ns nssym
+                      ; :ns nssym
                       :context :expr}
                      cb)
        (catch :default cause

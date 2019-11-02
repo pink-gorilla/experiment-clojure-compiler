@@ -34,6 +34,17 @@
       [fortune.core :refer [cookie]]))))
 
 
+(def namespace-declaration2
+  "Namespace Declaration is like a 'header' of a snippet
+   The namespace that generates should depend on the notebook, so this is a %s
+   namespace-declaration will get evaluated at compile time of the bundle.js
+  "
+  ; " (require '[fortune.core :refer [cookie]]) " 
+  " (require '[hello-world.app :refer [help]]) "
+  )
+
+
+
 (def dependencies
   "A bundle of dependencies.
    All functions that should be available in the self hosted clojurescript have

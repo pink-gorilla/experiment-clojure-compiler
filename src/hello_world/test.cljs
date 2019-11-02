@@ -37,7 +37,7 @@
   
   (eva 'bongo.demo " (help) " print-result)  ; call function in the eval namespace. Will produce an error because no namespace referred.
   
-  (eva 'bongo.demo " (pinkgorilla.compile.sandbox/help) " print-result)  ; call function in the eval namespace. Will produce an error because no namespace referred.
+  (eva 'bongo.demo " (hello-world.app/help) " print-result)  ; call function in the eval namespace. Will produce an error because no namespace referred.
   
   (eva 'bongo.demo " (cookie) " print-result)
 
